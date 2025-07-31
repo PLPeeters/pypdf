@@ -668,8 +668,7 @@ class TextStringObject(str, PdfObject):  # noqa: SLOT000
         o.autodetect_utf16 = False
         o.autodetect_pdfdocencoding = False
         o.utf16_bom = b""
-        if o.startswith(("\xfe\xff", "\xff\xfe")):
-            assert org is not None, "mypy"
+        if org is not None and o.startswith(("\xfe\xff", "\xff\xfe")):
             try:
                 o = str.__new__(cls, org.decode("utf-16"))
             except UnicodeDecodeError as exc:
