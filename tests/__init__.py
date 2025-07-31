@@ -138,7 +138,10 @@ def download_test_pdfs():
             executor.submit(get_data_from_url, pdf["url"], name=pdf["local_filename"])
             for pdf in pdfs
         ]
-        concurrent.futures.wait(futures)
+        completed_futs, _ = concurrent.futures.wait(futures)
+
+        for fut in completed_futs:
+            fut.result()
 
 
 def test_csv_consistency():
