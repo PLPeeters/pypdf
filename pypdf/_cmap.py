@@ -96,11 +96,9 @@ _predefined_cmap: dict[str, str] = {
     "/ETen-B5-V": "cp950",
     "/ETenms-B5-H": "cp950",
     "/ETenms-B5-V": "cp950",
-    "/UniCNS-UTF16-H": "utf-16-be",
-    "/UniCNS-UTF16-V": "utf-16-be",
-    "/UniGB-UTF16-H": "gb18030",
-    "/UniGB-UTF16-V": "gb18030",
-    # UCS2 in code
+    "/90ms-RKSJ-H": "utf-16-be",
+    "/90msp-RKSJ-H": "utf-16-be",
+    # UCS2 and UTF16 in code
 }
 
 # manually extracted from http://mirrors.ctan.org/fonts/adobe/afm/Adobe-Core35_AFMs-229.tar.gz
@@ -167,7 +165,7 @@ def _parse_encoding(
                 encoding = charset_encoding[enc].copy()
             elif enc in _predefined_cmap:
                 encoding = _predefined_cmap[enc]
-            elif "-UCS2-" in enc:
+            elif "-UCS2-" in enc or "-UTF16-" in enc:
                 encoding = "utf-16-be"
             else:
                 raise Exception("not found")
