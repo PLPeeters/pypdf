@@ -504,6 +504,7 @@ class PageObject(DictionaryObject):
             assert indirect_reference is not None, "mypy"
             self.update(cast(DictionaryObject, indirect_reference.get_object()))
         self._font_width_maps: dict[str, tuple[dict[str, float], str, float]] = {}
+        self._bad_xobjects: set[str] = set()
 
     def hash_bin(self) -> int:
         """
@@ -1769,6 +1770,10 @@ class PageObject(DictionaryObject):
                             )
                 except IndexError:
                     pass
+
+                if operands[0] in self._bad_xobjects:
+                    continue
+
                 try:
                     xobj = resources_dict["/XObject"]
                     if xobj[operands[0]]["/Subtype"] != "/Image":  # type: ignore
@@ -1794,6 +1799,7 @@ class PageObject(DictionaryObject):
                         f"Impossible to decode XFormObject {operands[0]}: {exception}",
                         __name__,
                     )
+                    self._bad_xobjects.add(operands[0])
                 finally:
                     extractor.text = ""
                     extractor.memo_cm = extractor.cm_matrix.copy()
